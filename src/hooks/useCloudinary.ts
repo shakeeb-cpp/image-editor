@@ -1,0 +1,261 @@
+import { Cloudinary } from "@cloudinary/url-gen";
+import {
+  brightness,
+  contrast,
+  saturation,
+  hue,
+  unsharpMask,
+  sharpen,
+} from "@cloudinary/url-gen/actions/adjust";
+import { crop } from "@cloudinary/url-gen/actions/resize";
+import {
+  grayscale,
+  sepia,
+  blur,
+  vignette,
+  colorize,
+  blackwhite,
+  redEye,
+  negate,
+  oilPaint,
+  simulateColorBlind,
+  pixelate,
+} from "@cloudinary/url-gen/actions/effect";
+// import { text } from '@cloudinary/url-gen/actions/overlay';
+import { source } from "@cloudinary/url-gen/actions/overlay";
+import { text } from "@cloudinary/url-gen/qualifiers/source";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store";
+import { byAngle, mode } from "@cloudinary/url-gen/actions/rotate";
+import {
+  horizontalFlip,
+  verticalFlip,
+} from "@cloudinary/url-gen/qualifiers/rotationMode";
+import { TextStyle } from "@cloudinary/url-gen/qualifiers/textStyle";
+import { Position } from "@cloudinary/url-gen/qualifiers";
+import { addToHistory } from "../store/slices/historySlice";
+import { useCallback } from "react";
+
+const cld = new Cloudinary({
+  cloud: {
+    cloudName: "dbcxk1kab", // Replace with your Cloudinary cloud name
+  },
+});
+
+export const useCloudinary = () => {
+  const dispatch = useDispatch();
+  const imageState = useSelector((state: RootState) => state.image);
+  const adjustmentState = useSelector((state: RootState) => state.adjustment);
+  const cropState = useSelector((state: RootState) => state.crop);
+  const rotationState = useSelector((state: RootState) => state.rotation);
+  const filterState = useSelector((state: RootState) => state.filter);
+  const overlayState = useSelector((state: RootState) => state.overlay);
+
+  // Create a snapshot of the current state
+  const saveToHistory = useCallback(() => {
+    const snapshot = {
+      adjustment: { ...adjustmentState },
+      crop: { ...cropState },
+      rotation: { ...rotationState },
+      filter: { ...filterState },
+      overlay: { ...overlayState },
+    };
+    dispatch(addToHistory(snapshot));
+  }, [
+    adjustmentState,
+    cropState,
+    rotationState,
+    filterState,
+    overlayState,
+    dispatch,
+  ]);
+
+  const buildTransformedUrl = () => {
+    if (!imageState.publicId) return null;
+
+    const myImage = cld.image(imageState.publicId);
+
+    // Apply adjustments
+    if (adjustmentState.brightness !== 0) {
+      myImage.adjust(brightness(adjustmentState.brightness));
+    }
+    if (adjustmentState.contrast !== 0) {
+      myImage.adjust(contrast(adjustmentState.contrast));
+    }
+    if (adjustmentState.saturation !== 0) {
+      myImage.adjust(saturation(adjustmentState.saturation));
+    }
+    if (adjustmentState.hue !== 0) {
+      myImage.adjust(hue(adjustmentState.hue));
+    }
+    if (adjustmentState.sharpness !== 0) {
+      myImage.effect(sharpen(adjustmentState.sharpness));
+    }
+    if (adjustmentState.unsharpMask !== 0) {
+      myImage.adjust(unsharpMask(adjustmentState.unsharpMask));
+    }
+    if (adjustmentState.vignette !== 0) {
+      myImage.effect(vignette(adjustmentState.vignette));
+    }
+    if (adjustmentState.ambiance > 0) {
+      // myImage.effect(ambiance(adjustmentState.ambiance));
+      myImage.adjust(saturation().level(adjustmentState.ambiance));
+      myImage.adjust(brightness().level(adjustmentState.ambiance));
+    } else if (adjustmentState.ambiance < 0) {
+      // Negative ambiance: decrease vibrance/coolness
+      myImage.adjust(saturation().level(adjustmentState.ambiance));
+      myImage.adjust(brightness().level(adjustmentState.ambiance));
+    }
+    if (adjustmentState.highlight !== 0) {
+      myImage.effect(brightness(adjustmentState.highlight));
+      myImage.effect(contrast(adjustmentState.highlight));
+    }
+
+    // Apply rotation
+    if (rotationState.angle !== 0) {
+      myImage.rotate(byAngle(rotationState.angle));
+    }
+    if (rotationState.flipHorizontal) {
+      myImage.rotate(mode(horizontalFlip()));
+    }
+    if (rotationState.flipVertical) {
+      myImage.rotate(mode(verticalFlip()));
+    }
+
+    // Apply crop with coordinate conversion
+    if (
+      cropState.isApplied &&
+      cropState.applied.width > 0 &&
+      cropState.applied.height > 0
+    ) {
+      // Get dimensions from Redux store
+      const { display, original } = imageState.dimensions;
+
+      // Only apply crop if we have valid dimensions
+      if (
+        display.width > 0 &&
+        display.height > 0 &&
+        original.width > 0 &&
+        original.height > 0
+      ) {
+        // Calculate scale factors
+        const scaleX = original.width / display.width;
+        const scaleY = original.height / display.height;
+
+        // Convert display coordinates to actual image coordinates
+        const actualX = Math.round(cropState.applied.x * scaleX);
+        const actualY = Math.round(cropState.applied.y * scaleY);
+        const actualWidth = Math.round(cropState.applied.width * scaleX);
+        const actualHeight = Math.round(cropState.applied.height * scaleY);
+
+        // Ensure coordinates are within bounds
+        const boundedX = Math.max(
+          0,
+          Math.min(actualX, original.width - actualWidth)
+        );
+        const boundedY = Math.max(
+          0,
+          Math.min(actualY, original.height - actualHeight)
+        );
+        const boundedWidth = Math.min(actualWidth, original.width - boundedX);
+        const boundedHeight = Math.min(
+          actualHeight,
+          original.height - boundedY
+        );
+
+        // Apply crop with corrected coordinates
+        myImage.resize(
+          crop()
+            .width(boundedWidth)
+            .height(boundedHeight)
+            .x(boundedX)
+            .y(boundedY)
+        );
+      }
+    }
+
+    // Apply filters
+    if (filterState.grayscale) {
+      myImage.effect(grayscale());
+    }
+    if (filterState.sepia) {
+      myImage.effect(sepia());
+    }
+    if (filterState.blur > 0) {
+      myImage.effect(blur(filterState.blur));
+    }
+    if (filterState.vignette) {
+      myImage.effect(vignette());
+    }
+    if (filterState.colorize !== 0) {
+      myImage.effect(colorize(filterState.colorize));
+    }
+    if (filterState.blackAndWhite) {
+      myImage.effect(blackwhite());
+    }
+    if (filterState.redEye) {
+      myImage.effect(redEye());
+    }
+    if (filterState.negate) {
+      myImage.effect(negate());
+    }
+    if (filterState.oilPaint > 0) {
+      myImage.effect(oilPaint(filterState.oilPaint));
+    }
+    if (filterState.simulateColorBlind !== "none") {
+      myImage.effect(
+        simulateColorBlind().condition(filterState.simulateColorBlind)
+      );
+    }
+    if (filterState.pixelate > 0) {
+      myImage.effect(pixelate(filterState.pixelate));
+    }
+
+    // Apply text overlays
+    overlayState.textOverlays.forEach((overlay) => {
+      myImage.overlay(
+        source(
+          text(
+            overlay.text,
+            new TextStyle(overlay.fontFamily, overlay.fontSize)
+          ).textColor(overlay.color)
+        ).position(new Position().offsetX(overlay.x).offsetY(overlay.y))
+      );
+    });
+
+   return myImage.toURL();
+  };
+
+  const uploadImage = async (
+    file: File
+  ): Promise<{ publicId: string; url: string }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "image-editor"); // Replace with your upload preset
+
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dbcxk1kab/image/upload", // Replace with your cloud name
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Upload failed");
+    }
+
+    const data = await response.json();
+    return {
+      publicId: data.public_id,
+      url: data.secure_url,
+    };
+  };
+
+  return {
+    buildTransformedUrl,
+    uploadImage,
+    cld,
+    saveToHistory, // Export the new function
+  };
+};
