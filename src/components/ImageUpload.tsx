@@ -23,6 +23,7 @@ const ImageUpload: React.FC = () => {
       const { publicId, url } = await uploadImage(file);
       dispatch(setImage({ publicId, originalUrl: url }));
     } catch (err) {
+      console.log(err)
       dispatch(setError('Failed to upload image. Please try again.'));
     } finally {
       dispatch(setUploading(false));

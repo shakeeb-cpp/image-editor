@@ -1,24 +1,29 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useAppSelector } from '../hooks/useAppSelector';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import {
   FolderOpen,
-  Download,
-  Undo,
-  Redo,
   Zap,
 } from 'lucide-react';
-import { applyUndo, applyRedo } from '../store/slices/historySlice';
-import { downloadImage } from '../utils/cloudinary';
+// import { applyUndo, applyRedo } from '../store/slices/historySlice';
+import { downloadImage, ExportFormat } from '../utils/cloudinary';
 import { setUploading, setImage, setError } from '../store/slices/imageSlice';
 import { useCloudinary } from '../hooks/useCloudinary';
+import ExportDropdown from './ui/ExportDropdown';
+import ExportModal from './ui/ExportModal';
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const { transformedUrl, isUploading, publicId } = useAppSelector(state => state.image);
-  const { canUndo, canRedo } = useAppSelector(state => state.history);
+  // const { canUndo, canRedo } = useAppSelector(state => state.history);
   const { uploadImage, saveToHistory } = useCloudinary();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Export state
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  const [exportFormat, setExportFormat] = useState<ExportFormat>('jpeg');
+  const [showExportModal, setShowExportModal] = useState(false);
 
   // Create initial snapshot when image is loaded
   useEffect(() => {
@@ -27,19 +32,62 @@ const Header: React.FC = () => {
     }
   }, [publicId, saveToHistory]);
 
-  const handleDownload = () => {
-    if (transformedUrl) {
-      downloadImage(transformedUrl);
+  const handleExport = async (format: ExportFormat) => {
+    if (!transformedUrl) return;
+
+    setExportFormat(format);
+    setIsExporting(true);
+    setExportProgress(0);
+    setShowExportModal(true);
+
+    try {
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setExportProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 100);
+
+      // Download the image
+      await downloadImage(transformedUrl, format);
+
+      // Complete the progress
+      clearInterval(progressInterval);
+      setExportProgress(100);
+
+      // Auto-close modal after 2 seconds when complete
+      setTimeout(() => {
+        setShowExportModal(false);
+        setIsExporting(false);
+        setExportProgress(0);
+      }, 2000);
+
+    } catch (error) {
+      console.error('Export failed:', error);
+      setIsExporting(false);
+      setShowExportModal(false);
+      setExportProgress(0);
+      dispatch(setError('Failed to export image. Please try again.'));
     }
   };
 
-  const handleUndo = () => {
-    dispatch(applyUndo());
+  const handleCloseExportModal = () => {
+    setShowExportModal(false);
+    setIsExporting(false);
+    setExportProgress(0);
   };
 
-  const handleRedo = () => {
-    dispatch(applyRedo());
-  };
+  // const handleUndo = () => {
+  //   dispatch(applyUndo());
+  // };
+
+  // const handleRedo = () => {
+  //   dispatch(applyRedo());
+  // };
 
   const handleOpenClick = () => {
     fileInputRef.current?.click();
@@ -63,6 +111,7 @@ const Header: React.FC = () => {
       const { publicId, url } = await uploadImage(file);
       dispatch(setImage({ publicId, originalUrl: url }));
     } catch (err) {
+      console.log(err)
       dispatch(setError('Failed to upload image. Please try again.'));
     } finally {
       dispatch(setUploading(false));
@@ -83,7 +132,7 @@ const Header: React.FC = () => {
 
       <div className="flex items-center space-x-3">
 
-        <div className="flex items-center space-x-1">
+        {/* <div className="flex items-center space-x-1">
           <button
             onClick={handleUndo}
             disabled={!canUndo}
@@ -101,7 +150,7 @@ const Header: React.FC = () => {
             <Redo className="w-4 h-4" />
           </button>
 
-        </div>
+        </div> */}
 
         <input
           ref={fileInputRef}
@@ -119,15 +168,18 @@ const Header: React.FC = () => {
           <span>{isUploading ? 'Uploading...' : 'Open'}</span>
         </button>
 
-        <button
-          onClick={handleDownload}
-          disabled={!transformedUrl}
-          className="px-3 py-1.5 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center space-x-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Download className="w-4 h-4" />
-          <span>Export</span>
-        </button>
+        <ExportDropdown
+          onExport={handleExport}
+          disabled={!transformedUrl || isExporting}
+        />
       </div>
+
+      <ExportModal
+        isOpen={showExportModal}
+        progress={exportProgress}
+        format={exportFormat}
+        onClose={handleCloseExportModal}
+      />
     </header>
   );
 };

@@ -39,21 +39,50 @@ export const uploadImage = async (file: File): Promise<{ publicId: string; url: 
 };
 
 
-export const downloadImage = async (url: string, filename: string = 'imagecraft_export.jpg') => {
+export type ExportFormat = 'jpeg' | 'png' | 'webp';
+
+export const getFormattedImageUrl = (originalUrl: string, format: ExportFormat): string => {
+  // If the URL already has transformations, we need to add the format parameter
+  if (originalUrl.includes('/upload/')) {
+    // Insert format transformation after /upload/
+    return originalUrl.replace('/upload/', `/upload/f_${format}/`);
+  }
+
+  // If no transformations exist, add format transformation
+  const urlParts = originalUrl.split('/upload/');
+  if (urlParts.length === 2) {
+    return `${urlParts[0]}/upload/f_${format}/${urlParts[1]}`;
+  }
+
+  return originalUrl;
+};
+
+export const downloadImage = async (
+  url: string,
+  format: ExportFormat = 'jpeg',
+  filename?: string
+) => {
   try {
-    const response = await fetch(url);
+    // Get the formatted URL for the specified format
+    const formattedUrl = getFormattedImageUrl(url, format);
+
+    // Generate filename if not provided
+    const defaultFilename = filename || `imagecraft_export.${format === 'jpeg' ? 'jpg' : format}`;
+
+    const response = await fetch(formattedUrl);
     const blob = await response.blob();
     const downloadUrl = window.URL.createObjectURL(blob);
-    
+
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = filename;
+    link.download = defaultFilename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     window.URL.revokeObjectURL(downloadUrl);
   } catch (error) {
     console.error('Download error:', error);
+    throw error;
   }
 };
