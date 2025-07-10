@@ -3,7 +3,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 // Initialize Cloudinary (you'll need to set your cloud name)
 const cld = new Cloudinary({
   cloud: {
-    cloudName: 'dbcxk1kab' // Replace with your actual cloud name
+    cloudName: import.meta.env.VITE_ClOUD_NAME // Replace with your actual cloud name
   }
 });
 
@@ -12,11 +12,11 @@ console.log(cld)
 export const uploadImage = async (file: File): Promise<{ publicId: string; url: string }> => {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', 'image-editor'); // Replace with your upload preset
+  formData.append('upload_preset', import.meta.env.VITE_UPLOAD_PRESET_NAME); // Replace with your upload preset
   
   try {
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/dbcxk1kab/image/upload`, // Replace 'dbcxk1kab' with your cloud name
+      import.meta.env.VITE_ClOUDINARY_URL, // Replace import.meta.env.VITE_ClOUD_NAME with your cloud name
       {
         method: 'POST',
         body: formData,

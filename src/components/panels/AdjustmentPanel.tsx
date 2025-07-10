@@ -28,18 +28,7 @@ const useDebounce = (callback: Function, delay: number) => {
   }, [callback, delay]);
 };
 
-// Throttle utility function
-const useThrottle = (callback: Function, delay: number) => {
-  const lastCallRef = useRef<number>(0);
-  
-  return useCallback((...args: any[]) => {
-    const now = Date.now();
-    if (now - lastCallRef.current >= delay) {
-      callback(...args);
-      lastCallRef.current = now;
-    }
-  }, [callback, delay]);
-};
+
 
 interface SliderControlProps {
   label: string;
@@ -62,27 +51,26 @@ const SliderControl: React.FC<SliderControlProps> = React.memo(({
   const sliderRef = useRef<HTMLInputElement>(null);
   const { saveToHistory } = useCloudinary(); // Add this
   
-  // Use throttle for immediate visual feedback
-  const throttledOnChange = useThrottle(onChange, 16); // ~60fps
-  
-  // Debounce for final value commit and history saving
-  const debouncedOnChange = useDebounce((newValue: number) => {
+  // Immediate onChange for instant feedback (no throttling for state updates)
+  const immediateOnChange = useCallback((newValue: number) => {
     onChange(newValue);
-    saveToHistory(); // Save to history after debounced change
-  }, 300);
+  }, [onChange]);
 
-  // Remove this console.log
-  // console.log(debouncedOnChange)
-  
+  // Debounce only for history saving
+  const debouncedHistorySave = useDebounce(() => {
+    saveToHistory();
+  }, 500);
+
   const handleSliderChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseInt(e.target.value);
     localValueRef.current = newValue;
-    
-    // Use throttled for smooth real-time updates
-    throttledOnChange(newValue);
-    // Use debounced for history saving
-    debouncedOnChange(newValue);
-  }, [throttledOnChange, debouncedOnChange]);
+
+    // Update state immediately for instant visual feedback
+    immediateOnChange(newValue);
+
+    // Save to history after user stops adjusting
+    debouncedHistorySave();
+  }, [immediateOnChange, debouncedHistorySave]);
   
   const handleSliderClick = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
     const slider = e.currentTarget;

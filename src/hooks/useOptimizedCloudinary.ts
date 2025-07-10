@@ -1,3 +1,6 @@
+import { useMemo, useCallback, useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 import { Cloudinary } from "@cloudinary/url-gen";
 import {
   brightness,
@@ -7,12 +10,11 @@ import {
   unsharpMask,
   sharpen,
 } from "@cloudinary/url-gen/actions/adjust";
-import { crop } from "@cloudinary/url-gen/actions/resize";
 import {
+  vignette,
   grayscale,
   sepia,
   blur,
-  vignette,
   colorize,
   blackwhite,
   redEye,
@@ -22,37 +24,39 @@ import {
   pixelate,
   backgroundRemoval,
   generativeRemove,
-  generativeReplace,
-  generativeBackgroundReplace,
   generativeRecolor,
   generativeRestore,
   upscale,
   enhance,
   extract,
+  generativeReplace,
 } from "@cloudinary/url-gen/actions/effect";
-// import { text } from '@cloudinary/url-gen/actions/overlay';
-import { source } from "@cloudinary/url-gen/actions/overlay";
-import { text } from "@cloudinary/url-gen/qualifiers/source";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store";
+import { crop } from "@cloudinary/url-gen/actions/resize";
 import { byAngle, mode } from "@cloudinary/url-gen/actions/rotate";
 import {
   horizontalFlip,
   verticalFlip,
 } from "@cloudinary/url-gen/qualifiers/rotationMode";
+import { source } from "@cloudinary/url-gen/actions/overlay";
+import { text } from "@cloudinary/url-gen/qualifiers/source";
 import { TextStyle } from "@cloudinary/url-gen/qualifiers/textStyle";
 import { Position } from "@cloudinary/url-gen/qualifiers";
-import { addToHistory } from "../store/slices/historySlice";
-import { useCallback } from "react";
 
 const cld = new Cloudinary({
   cloud: {
-    cloudName: import.meta.env.VITE_ClOUD_NAME, // Replace with your Cloudinary cloud name
+    cloudName: import.meta.env.VITE_ClOUD_NAME,
   },
 });
 
-export const useCloudinary = () => {
-  const dispatch = useDispatch();
+// Create a hash function for state objects
+const createStateHash = (state: any): string => {
+  return JSON.stringify(state);
+};
+
+// URL cache to avoid rebuilding identical URLs
+const urlCache = new Map<string, string>();
+
+export const useOptimizedCloudinary = () => {
   const imageState = useSelector((state: RootState) => state.image);
   const adjustmentState = useSelector((state: RootState) => state.adjustment);
   const cropState = useSelector((state: RootState) => state.crop);
@@ -62,19 +66,24 @@ export const useCloudinary = () => {
   const bgState = useSelector((state: RootState) => state.bg);
   const aiState = useSelector((state: RootState) => state.ai);
 
-  // Create a snapshot of the current state
-  const saveToHistory = useCallback(() => {
-    const snapshot = {
-      adjustment: { ...adjustmentState },
-      crop: { ...cropState },
-      rotation: { ...rotationState },
-      filter: { ...filterState },
-      overlay: { ...overlayState },
-      bg: { ...bgState },
-      ai: { ...aiState },
-    };
-    dispatch(addToHistory(snapshot));
+  // Cache for the last built URL to avoid unnecessary rebuilds
+  const lastUrlRef = useRef<string>("");
+  const lastStateHashRef = useRef<string>("");
+
+  // Memoized state hash to detect changes
+  const stateHash = useMemo(() => {
+    return createStateHash({
+      publicId: imageState.publicId,
+      adjustment: adjustmentState,
+      crop: cropState,
+      rotation: rotationState,
+      filter: filterState,
+      overlay: overlayState,
+      bg: bgState,
+      ai: aiState,
+    });
   }, [
+    imageState.publicId,
     adjustmentState,
     cropState,
     rotationState,
@@ -82,15 +91,29 @@ export const useCloudinary = () => {
     overlayState,
     bgState,
     aiState,
-    dispatch,
   ]);
 
-  const buildTransformedUrl = () => {
+  // Optimized URL builder with caching
+  const buildTransformedUrl = useCallback(() => {
     if (!imageState.publicId) return null;
 
+    // Check if state hasn't changed
+    if (stateHash === lastStateHashRef.current && lastUrlRef.current) {
+      return lastUrlRef.current;
+    }
+
+    // Check cache first
+    const cachedUrl = urlCache.get(stateHash);
+    if (cachedUrl) {
+      lastUrlRef.current = cachedUrl;
+      lastStateHashRef.current = stateHash;
+      return cachedUrl;
+    }
+
+    // Build new URL
     const myImage = cld.image(imageState.publicId);
 
-    // Apply adjustments
+    // Apply adjustments (only if values are not default)
     if (adjustmentState.brightness !== 0) {
       myImage.adjust(brightness(adjustmentState.brightness));
     }
@@ -113,11 +136,9 @@ export const useCloudinary = () => {
       myImage.effect(vignette(adjustmentState.vignette));
     }
     if (adjustmentState.ambiance > 0) {
-      // myImage.effect(ambiance(adjustmentState.ambiance));
       myImage.adjust(saturation().level(adjustmentState.ambiance));
       myImage.adjust(brightness().level(adjustmentState.ambiance));
     } else if (adjustmentState.ambiance < 0) {
-      // Negative ambiance: decrease vibrance/coolness
       myImage.adjust(saturation().level(adjustmentState.ambiance));
       myImage.adjust(brightness().level(adjustmentState.ambiance));
     }
@@ -145,8 +166,6 @@ export const useCloudinary = () => {
       cropState.position
     ) {
       let gravity: string;
-
-      // Map position to gravity
       switch (cropState.position) {
         case "top":
           gravity = "north";
@@ -226,24 +245,25 @@ export const useCloudinary = () => {
     }
 
     if (bgState.generativeRemove.enabled && bgState.generativeRemove.prompt) {
-      myImage.effect(generativeRemove().prompt(bgState.generativeRemove.prompt));
-    }
-
-    if (bgState.generativeReplace.enabled && bgState.generativeReplace.from && bgState.generativeReplace.to) {
       myImage.effect(
-        generativeReplace()
-          .from(bgState.generativeReplace.from)
-          .to(bgState.generativeReplace.to)
+        generativeRemove().prompt(bgState.generativeRemove.prompt)
       );
     }
 
-    if (bgState.generativeBackgroundReplace.enabled && bgState.generativeBackgroundReplace.prompt) {
-      myImage.effect(generativeBackgroundReplace().prompt(bgState.generativeBackgroundReplace.prompt));
+    if (
+      bgState.generativeReplace.enabled &&
+      bgState.generativeReplace.from &&
+      bgState.generativeReplace.to
+    ) {
+      myImage.effect(generativeReplace().from(bgState.generativeReplace.to));
     }
 
     // Apply AI effects
     if (aiState.generativeRecolor.enabled && aiState.generativeRecolor.prompt) {
-      const recolorEffect = generativeRecolor(aiState.generativeRecolor.prompt, aiState.generativeRecolor.color);
+      const recolorEffect = generativeRecolor(
+        aiState.generativeRecolor.prompt,
+        aiState.generativeRecolor.color
+      );
       if (aiState.generativeRecolor.detectMultiple) {
         recolorEffect.detectMultiple();
       }
@@ -263,42 +283,36 @@ export const useCloudinary = () => {
     }
 
     if (aiState.extract.enabled && aiState.extract.prompt) {
-      myImage.effect(extract(aiState.extract.prompt).mode(aiState.extract.mode));
+      myImage.effect(
+        extract(aiState.extract.prompt).mode(aiState.extract.mode)
+      );
     }
 
-    return myImage.toURL();
-  };
+    const newUrl = myImage.toURL();
 
-  const uploadImage = async (
-    file: File
-  ): Promise<{ publicId: string; url: string }> => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", import.meta.env.VITE_UPLOAD_PRESET_NAME); // Replace with your upload preset
+    // Cache the result
+    urlCache.set(stateHash, newUrl);
 
-    const response = await fetch(
-      import.meta.env.VITE_ClOUDINARY_URL, // Replace with your cloud name
-      {
-        method: "POST",
-        body: formData,
+    // Keep cache size reasonable (max 100 entries)
+    if (urlCache.size > 100) {
+      const firstKey = urlCache.keys().next().value;
+      if (firstKey !== undefined) {
+        urlCache.delete(firstKey);
       }
-    );
-
-    if (!response.ok) {
-      throw new Error("Upload failed");
     }
 
-    const data = await response.json();
-    return {
-      publicId: data.public_id,
-      url: data.secure_url,
-    };
-  };
+    lastUrlRef.current = newUrl;
+    lastStateHashRef.current = stateHash;
+
+    return newUrl;
+  }, [stateHash, imageState.publicId]);
 
   return {
     buildTransformedUrl,
-    uploadImage,
-    cld,
-    saveToHistory, // Export the new function
+    clearCache: () => {
+      urlCache.clear();
+      lastUrlRef.current = "";
+      lastStateHashRef.current = "";
+    },
   };
 };
