@@ -15,6 +15,7 @@ const ImagePreview: React.FC = () => {
   const filterState = useSelector((state: RootState) => state.filter);
   const overlayState = useSelector((state: RootState) => state.overlay);
   const bgState = useSelector((state: RootState) => state.bg);
+  const aiState = useSelector((state: RootState) => state.ai);
   const { buildTransformedUrl } = useCloudinary();
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const ImagePreview: React.FC = () => {
     filterState,
     overlayState,
     bgState,
+    aiState,
     buildTransformedUrl,
     dispatch
   ]);

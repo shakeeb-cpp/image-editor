@@ -66,6 +66,7 @@ const filterSlice = createSlice({
       state.pixelate = 0;
     },
     setState: (state, action: PayloadAction<FilterState>) => {
+      console.log(state)
       return action.payload;
     }
   },

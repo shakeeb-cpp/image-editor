@@ -52,6 +52,7 @@ const adjustmentSlice = createSlice({
       Object.assign(state, initialState);
     },
     setState: (state, action: PayloadAction<AdjustmentState>) => {
+      console.log(state)
       return action.payload;
     }
   },

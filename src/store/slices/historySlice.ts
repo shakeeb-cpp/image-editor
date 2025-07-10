@@ -6,6 +6,7 @@ import { resetAdjustments } from './adjustmentSlice';
 import { resetFilters } from './filterSlice';
 import { resetOverlays } from './overlaySlice';
 import { resetBgEffects } from './bgSlice';
+import { resetAiEffects } from './aiSlice';
 
 interface AppSnapshot {
   adjustment: any;
@@ -14,6 +15,7 @@ interface AppSnapshot {
   filter: any;
   overlay: any;
   bg: any;
+  ai: any;
 }
 
 interface HistoryState {
@@ -115,6 +117,10 @@ export const applyUndo = () => (dispatch: any, getState: any) => {
       // Apply background state
       dispatch(resetBgEffects());
       dispatch({ type: 'bg/setBgState', payload: previousState.bg });
+
+      // Apply AI state
+      dispatch(resetAiEffects());
+      dispatch({ type: 'ai/setAiState', payload: previousState.ai });
     }
   }
 };
@@ -153,6 +159,10 @@ export const applyRedo = () => (dispatch: any, getState: any) => {
       // Apply background state
       dispatch(resetBgEffects());
       dispatch({ type: 'bg/setBgState', payload: nextState.bg });
+
+      // Apply AI state
+      dispatch(resetAiEffects());
+      dispatch({ type: 'ai/setAiState', payload: nextState.ai });
     }
   }
 };

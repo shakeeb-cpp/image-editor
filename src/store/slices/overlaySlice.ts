@@ -39,6 +39,7 @@ const overlaySlice = createSlice({
       state.imageOverlays = [];
     },
     setState: (state, action: PayloadAction<OverlayState>) => {
+      console.log(state)
       return action.payload;
     }
   },

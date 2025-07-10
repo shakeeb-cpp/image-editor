@@ -24,6 +24,11 @@ import {
   generativeRemove,
   generativeReplace,
   generativeBackgroundReplace,
+  generativeRecolor,
+  generativeRestore,
+  upscale,
+  enhance,
+  extract,
 } from "@cloudinary/url-gen/actions/effect";
 // import { text } from '@cloudinary/url-gen/actions/overlay';
 import { source } from "@cloudinary/url-gen/actions/overlay";
@@ -55,6 +60,7 @@ export const useCloudinary = () => {
   const filterState = useSelector((state: RootState) => state.filter);
   const overlayState = useSelector((state: RootState) => state.overlay);
   const bgState = useSelector((state: RootState) => state.bg);
+  const aiState = useSelector((state: RootState) => state.ai);
 
   // Create a snapshot of the current state
   const saveToHistory = useCallback(() => {
@@ -65,6 +71,7 @@ export const useCloudinary = () => {
       filter: { ...filterState },
       overlay: { ...overlayState },
       bg: { ...bgState },
+      ai: { ...aiState },
     };
     dispatch(addToHistory(snapshot));
   }, [
@@ -74,6 +81,7 @@ export const useCloudinary = () => {
     filterState,
     overlayState,
     bgState,
+    aiState,
     dispatch,
   ]);
 
@@ -231,6 +239,31 @@ export const useCloudinary = () => {
 
     if (bgState.generativeBackgroundReplace.enabled && bgState.generativeBackgroundReplace.prompt) {
       myImage.effect(generativeBackgroundReplace().prompt(bgState.generativeBackgroundReplace.prompt));
+    }
+
+    // Apply AI effects
+    if (aiState.generativeRecolor.enabled && aiState.generativeRecolor.prompt) {
+      const recolorEffect = generativeRecolor(aiState.generativeRecolor.prompt, aiState.generativeRecolor.color);
+      if (aiState.generativeRecolor.detectMultiple) {
+        recolorEffect.detectMultiple();
+      }
+      myImage.effect(recolorEffect);
+    }
+
+    if (aiState.generativeRestore.enabled) {
+      myImage.effect(generativeRestore());
+    }
+
+    if (aiState.upscale.enabled) {
+      myImage.effect(upscale());
+    }
+
+    if (aiState.enhance.enabled) {
+      myImage.effect(enhance());
+    }
+
+    if (aiState.extract.enabled && aiState.extract.prompt) {
+      myImage.effect(extract(aiState.extract.prompt).mode(aiState.extract.mode));
     }
 
     return myImage.toURL();

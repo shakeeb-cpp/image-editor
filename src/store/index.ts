@@ -7,6 +7,7 @@ import filterReducer from './slices/filterSlice';
 import overlayReducer from './slices/overlaySlice';
 import historyReducer from './slices/historySlice';
 import bgReducer from './slices/bgSlice';
+import aiReducer from './slices/aiSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     overlay: overlayReducer,
     history: historyReducer,
     bg: bgReducer,
+    ai: aiReducer,
   },
 });
 

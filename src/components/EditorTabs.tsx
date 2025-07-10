@@ -6,6 +6,7 @@ import RotationPanel from './panels/RotationPanel';
 import FilterPanel from './panels/FilterPanel';
 import OverlayPanel from './panels/OverlayPanel';
 import BgPanel from './panels/BgPanel';
+import AiPanel from './panels/AiPanel';
 
 interface EditorTabsProps {
   activeTab: string;
@@ -31,6 +32,8 @@ const EditorTabs: React.FC<EditorTabsProps> = ({ activeTab, setActiveTab }) => {
         return <OverlayPanel />;
       case 'background':
         return <BgPanel />;
+      case 'ai':
+        return <AiPanel />;
       default:
         return null;
     }

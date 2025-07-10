@@ -32,6 +32,7 @@ const rotationSlice = createSlice({
       state.flipVertical = false;
     },
     setRotationState: (state, action: PayloadAction<any>) => {
+      console.log(state)
       return action.payload;
     },
   },
