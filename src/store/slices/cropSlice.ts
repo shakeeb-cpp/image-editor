@@ -1,99 +1,41 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export interface CropState {
-  // Preview crop (what user is selecting)
-  preview: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  // Applied crop (what actually gets applied to image)
-  applied: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  active: boolean; // Whether crop mode is active
-  isApplied: boolean; // Whether crop has been applied
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CropState } from '../../types';
 
 const initialState: CropState = {
-  preview: {
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  },
-  applied: {
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  },
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
   active: false,
-  isApplied: false,
+  position: null, // Add position state - null means no position selected
 };
 
 const cropSlice = createSlice({
-  name: "crop",
+  name: 'crop',
   initialState,
   reducers: {
-    // Set preview crop (what user is selecting)
-    setPreviewCrop: (
-      state,
-      action: PayloadAction<{
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-      }>
-    ) => {
-      state.preview = action.payload;
+    setCrop: (state, action: PayloadAction<{ x: number; y: number; width: number; height: number }>) => {
+      state.x = action.payload.x;
+      state.y = action.payload.y;
+      state.width = action.payload.width;
+      state.height = action.payload.height;
     },
-
-    // Apply the current preview crop to the image
-    // Apply the current preview crop to the image
-    applyCrop: (state) => {
-      // Only apply if there's actually a change
-      if (
-        state.preview.x !== state.applied.x ||
-        state.preview.y !== state.applied.y ||
-        state.preview.width !== state.applied.width ||
-        state.preview.height !== state.applied.height
-      ) {
-        state.applied = { ...state.preview };
-        state.isApplied = true;
-      }
-    },
-
-    // Toggle crop mode
     setActive: (state, action: PayloadAction<boolean>) => {
       state.active = action.payload;
-      if (!action.payload) {
-        // If disabling crop mode, reset preview
-        state.preview = { x: 0, y: 0, width: 0, height: 0 };
-      }
     },
-
-    // Reset everything
+    setPosition: (state, action: PayloadAction<'top' | 'center' | 'bottom'>) => {
+      state.position = action.payload;
+    },
     resetCrop: (state) => {
-      state.preview = { x: 0, y: 0, width: 0, height: 0 };
-      state.applied = { x: 0, y: 0, width: 0, height: 0 };
+      state.x = 0;
+      state.y = 0;
+      state.width = 0;
+      state.height = 0;
       state.active = false;
-      state.isApplied = false;
-    },
-
-    // Cancel current preview (revert to applied state)
-    cancelCrop: (state) => {
-      state.preview = { ...state.applied };
-      state.active = false;
+      state.position = null;
     },
   },
 });
 
-export const { setPreviewCrop, applyCrop, setActive, resetCrop, cancelCrop } =
-  cropSlice.actions;
-
+export const { setCrop, setActive, setPosition, resetCrop } = cropSlice.actions;
 export default cropSlice.reducer;

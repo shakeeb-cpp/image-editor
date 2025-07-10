@@ -4,10 +4,6 @@ export interface ImageState {
   transformedUrl: string | null;
   isUploading: boolean;
   error: string | null;
-  dimensions: {
-    display: { width: number; height: number };
-    original: { width: number; height: number };
-  };
 }
 
 export interface AdjustmentState {
@@ -24,22 +20,12 @@ export interface AdjustmentState {
 }
 
 export interface CropState {
-  // Preview crop (what user is selecting)
-  preview: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  // Applied crop (what actually gets applied to image)
-  applied: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  active: boolean; // Whether crop mode is active
-  isApplied: boolean; // Whether crop has been applied
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  active: boolean;
+  position: 'top' | 'center' | 'bottom' | null;
 }
 
 export interface RotationState {

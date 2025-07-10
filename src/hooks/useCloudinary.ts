@@ -122,56 +122,38 @@ export const useCloudinary = () => {
       myImage.rotate(mode(verticalFlip()));
     }
 
-    // Apply crop with coordinate conversion
+    // Apply crop
     if (
-      cropState.isApplied &&
-      cropState.applied.width > 0 &&
-      cropState.applied.height > 0
+      cropState.active &&
+      cropState.width > 0 &&
+      cropState.height > 0 &&
+      cropState.position
     ) {
-      // Get dimensions from Redux store
-      const { display, original } = imageState.dimensions;
+      let gravity: string;
 
-      // Only apply crop if we have valid dimensions
-      if (
-        display.width > 0 &&
-        display.height > 0 &&
-        original.width > 0 &&
-        original.height > 0
-      ) {
-        // Calculate scale factors
-        const scaleX = original.width / display.width;
-        const scaleY = original.height / display.height;
-
-        // Convert display coordinates to actual image coordinates
-        const actualX = Math.round(cropState.applied.x * scaleX);
-        const actualY = Math.round(cropState.applied.y * scaleY);
-        const actualWidth = Math.round(cropState.applied.width * scaleX);
-        const actualHeight = Math.round(cropState.applied.height * scaleY);
-
-        // Ensure coordinates are within bounds
-        const boundedX = Math.max(
-          0,
-          Math.min(actualX, original.width - actualWidth)
-        );
-        const boundedY = Math.max(
-          0,
-          Math.min(actualY, original.height - actualHeight)
-        );
-        const boundedWidth = Math.min(actualWidth, original.width - boundedX);
-        const boundedHeight = Math.min(
-          actualHeight,
-          original.height - boundedY
-        );
-
-        // Apply crop with corrected coordinates
-        myImage.resize(
-          crop()
-            .width(boundedWidth)
-            .height(boundedHeight)
-            .x(boundedX)
-            .y(boundedY)
-        );
+      // Map position to gravity
+      switch (cropState.position) {
+        case "top":
+          gravity = "north";
+          break;
+        case "center":
+          gravity = "center";
+          break;
+        case "bottom":
+          gravity = "south";
+          break;
+        default:
+          gravity = "center";
       }
+
+      myImage.resize(
+        crop()
+          .width(cropState.width)
+          .height(cropState.height)
+          .x(cropState.x)
+          .y(cropState.y)
+          .gravity(gravity)
+      );
     }
 
     // Apply filters
@@ -223,7 +205,7 @@ export const useCloudinary = () => {
       );
     });
 
-   return myImage.toURL();
+    return myImage.toURL();
   };
 
   const uploadImage = async (

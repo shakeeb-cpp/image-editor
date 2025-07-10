@@ -4,15 +4,12 @@ import { store } from './store';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import ImageUpload from './components/ImageUpload';
-// import ImagePreview from './components/ImagePreview';
+import ImagePreview from './components/ImagePreview';
 import EditorTabs from './components/EditorTabs';
 // import ActionBar from './components/ActionBar';
 // import { Edit3 } from 'lucide-react';
 import Header from './components/Header';
 import { Sliders, Crop, RotateCw, Filter, Type } from 'lucide-react';
-import InteractiveCropPreview from './components/InteractiveCropPreview';
-import TransformationManager from './components/TransformationManager';
-
 
 
 const AppContent: React.FC = () => {
@@ -86,7 +83,7 @@ const AppContent: React.FC = () => {
             <div className="flex-1 flex flex-col justify-center items-center p-6 overflow-hidden">
               {/* {publicId && <ActionBar />} */}
               <div className="w-full h-full flex items-center justify-center">
-                <InteractiveCropPreview  />
+                <ImagePreview />
               </div>
             </div>
           </div>
@@ -100,7 +97,6 @@ function App() {
   return (
     <Provider store={store}>
       <AppContent />
-      <TransformationManager />
     </Provider>
   );
 }

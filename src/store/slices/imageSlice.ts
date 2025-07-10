@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ImageState } from "../../types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ImageState } from '../../types';
 
 const initialState: ImageState = {
   publicId: null,
@@ -7,36 +7,20 @@ const initialState: ImageState = {
   transformedUrl: null,
   isUploading: false,
   error: null,
-  dimensions: {
-    display: { width: 0, height: 0 },
-    original: { width: 0, height: 0 },
-  },
 };
 
 const imageSlice = createSlice({
-  name: "image",
+  name: 'image',
   initialState,
   reducers: {
     setUploading: (state, action: PayloadAction<boolean>) => {
       state.isUploading = action.payload;
     },
-    setImage: (
-      state,
-      action: PayloadAction<{ publicId: string; originalUrl: string }>
-    ) => {
+    setImage: (state, action: PayloadAction<{ publicId: string; originalUrl: string }>) => {
       state.publicId = action.payload.publicId;
       state.originalUrl = action.payload.originalUrl;
       state.transformedUrl = action.payload.originalUrl;
       state.error = null;
-    },
-    setDimensions: (
-      state,
-      action: PayloadAction<{
-        display: { width: number; height: number };
-        original: { width: number; height: number };
-      }>
-    ) => {
-      state.dimensions = action.payload;
     },
     setTransformedUrl: (state, action: PayloadAction<string>) => {
       state.transformedUrl = action.payload;
@@ -54,12 +38,5 @@ const imageSlice = createSlice({
   },
 });
 
-export const {
-  setUploading,
-  setImage,
-  setTransformedUrl,
-  setError,
-  clearImage,
-  setDimensions
-} = imageSlice.actions;
+export const { setUploading, setImage, setTransformedUrl, setError, clearImage } = imageSlice.actions;
 export default imageSlice.reducer;
