@@ -6,6 +6,7 @@ import rotationReducer from './slices/rotationSlice';
 import filterReducer from './slices/filterSlice';
 import overlayReducer from './slices/overlaySlice';
 import historyReducer from './slices/historySlice';
+import bgReducer from './slices/bgSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     filter: filterReducer,
     overlay: overlayReducer,
     history: historyReducer,
+    bg: bgReducer,
   },
 });
 

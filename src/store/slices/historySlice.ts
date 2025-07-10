@@ -5,6 +5,7 @@ import { setRotationState } from './rotationSlice';
 import { resetAdjustments } from './adjustmentSlice';
 import { resetFilters } from './filterSlice';
 import { resetOverlays } from './overlaySlice';
+import { resetBgEffects } from './bgSlice';
 
 interface AppSnapshot {
   adjustment: any;
@@ -12,6 +13,7 @@ interface AppSnapshot {
   rotation: any;
   filter: any;
   overlay: any;
+  bg: any;
 }
 
 interface HistoryState {
@@ -109,6 +111,10 @@ export const applyUndo = () => (dispatch: any, getState: any) => {
       // Apply overlay state
       dispatch(resetOverlays());
       dispatch({ type: 'overlay/setState', payload: previousState.overlay });
+
+      // Apply background state
+      dispatch(resetBgEffects());
+      dispatch({ type: 'bg/setBgState', payload: previousState.bg });
     }
   }
 };
@@ -143,6 +149,10 @@ export const applyRedo = () => (dispatch: any, getState: any) => {
       // Apply overlay state
       dispatch(resetOverlays());
       dispatch({ type: 'overlay/setState', payload: nextState.overlay });
+
+      // Apply background state
+      dispatch(resetBgEffects());
+      dispatch({ type: 'bg/setBgState', payload: nextState.bg });
     }
   }
 };

@@ -7,7 +7,8 @@ import {
   Layers, 
   Type, 
   Crop, 
-  Circle 
+  Scissors,
+  Filter
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -19,12 +20,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const tools = [
     { id: 'upload', icon: Plus, label: 'Upload' },
     { id: 'adjustments', icon: Sliders, label: 'Adjustments' },
-    { id: 'filters', icon: Sparkles, label: 'Filters' },
+    { id: 'filters', icon: Filter, label: 'Filters' },
     { id: 'crop', icon: Crop, label: 'Crop' },
     { id: 'rotate', icon: RotateCcw, label: 'Rotate' },
     { id: 'text', icon: Type, label: 'Text' },
     { id: 'overlay', icon: Layers, label: 'Overlay' },
-    { id: 'shapes', icon: Circle, label: 'Shapes' },
+    { id: 'background', icon: Scissors, label: 'Background' },
+    { id: 'ai', icon: Sparkles , label: 'Ai Magic' },
   ];
   
   return (

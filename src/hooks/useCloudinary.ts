@@ -20,6 +20,10 @@ import {
   oilPaint,
   simulateColorBlind,
   pixelate,
+  backgroundRemoval,
+  generativeRemove,
+  generativeReplace,
+  generativeBackgroundReplace,
 } from "@cloudinary/url-gen/actions/effect";
 // import { text } from '@cloudinary/url-gen/actions/overlay';
 import { source } from "@cloudinary/url-gen/actions/overlay";
@@ -50,6 +54,7 @@ export const useCloudinary = () => {
   const rotationState = useSelector((state: RootState) => state.rotation);
   const filterState = useSelector((state: RootState) => state.filter);
   const overlayState = useSelector((state: RootState) => state.overlay);
+  const bgState = useSelector((state: RootState) => state.bg);
 
   // Create a snapshot of the current state
   const saveToHistory = useCallback(() => {
@@ -59,6 +64,7 @@ export const useCloudinary = () => {
       rotation: { ...rotationState },
       filter: { ...filterState },
       overlay: { ...overlayState },
+      bg: { ...bgState },
     };
     dispatch(addToHistory(snapshot));
   }, [
@@ -67,6 +73,7 @@ export const useCloudinary = () => {
     rotationState,
     filterState,
     overlayState,
+    bgState,
     dispatch,
   ]);
 
@@ -204,6 +211,27 @@ export const useCloudinary = () => {
         ).position(new Position().offsetX(overlay.x).offsetY(overlay.y))
       );
     });
+
+    // Apply background effects
+    if (bgState.backgroundRemoval.enabled) {
+      myImage.effect(backgroundRemoval());
+    }
+
+    if (bgState.generativeRemove.enabled && bgState.generativeRemove.prompt) {
+      myImage.effect(generativeRemove().prompt(bgState.generativeRemove.prompt));
+    }
+
+    if (bgState.generativeReplace.enabled && bgState.generativeReplace.from && bgState.generativeReplace.to) {
+      myImage.effect(
+        generativeReplace()
+          .from(bgState.generativeReplace.from)
+          .to(bgState.generativeReplace.to)
+      );
+    }
+
+    if (bgState.generativeBackgroundReplace.enabled && bgState.generativeBackgroundReplace.prompt) {
+      myImage.effect(generativeBackgroundReplace().prompt(bgState.generativeBackgroundReplace.prompt));
+    }
 
     return myImage.toURL();
   };

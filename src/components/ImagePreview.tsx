@@ -14,6 +14,7 @@ const ImagePreview: React.FC = () => {
   const rotationState = useSelector((state: RootState) => state.rotation);
   const filterState = useSelector((state: RootState) => state.filter);
   const overlayState = useSelector((state: RootState) => state.overlay);
+  const bgState = useSelector((state: RootState) => state.bg);
   const { buildTransformedUrl } = useCloudinary();
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const ImagePreview: React.FC = () => {
     rotationState,
     filterState,
     overlayState,
+    bgState,
     buildTransformedUrl,
     dispatch
   ]);

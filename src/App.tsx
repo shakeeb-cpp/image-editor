@@ -9,7 +9,7 @@ import EditorTabs from './components/EditorTabs';
 // import ActionBar from './components/ActionBar';
 // import { Edit3 } from 'lucide-react';
 import Header from './components/Header';
-import { Sliders, Crop, RotateCw, Filter, Type } from 'lucide-react';
+import { Sliders, Crop, RotateCw, Filter, Type, Scissors } from 'lucide-react';
 
 
 const AppContent: React.FC = () => {
@@ -22,6 +22,7 @@ const AppContent: React.FC = () => {
     { id: 'adjustments', label: 'Adjustments', icon: Sliders },
     { id: 'filters', label: 'Filters', icon: Filter },
     { id: 'overlay', label: 'Overlay', icon: Type },
+    { id: 'background', label: 'Background', icon: Scissors },
   ];
 
   return (

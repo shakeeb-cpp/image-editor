@@ -5,6 +5,7 @@ import CropPanel from './panels/CropPanel';
 import RotationPanel from './panels/RotationPanel';
 import FilterPanel from './panels/FilterPanel';
 import OverlayPanel from './panels/OverlayPanel';
+import BgPanel from './panels/BgPanel';
 
 interface EditorTabsProps {
   activeTab: string;
@@ -28,6 +29,8 @@ const EditorTabs: React.FC<EditorTabsProps> = ({ activeTab, setActiveTab }) => {
         return <FilterPanel />;
       case 'overlay':
         return <OverlayPanel />;
+      case 'background':
+        return <BgPanel />;
       default:
         return null;
     }
