@@ -255,7 +255,7 @@ export const useOptimizedCloudinary = () => {
       bgState.generativeReplace.from &&
       bgState.generativeReplace.to
     ) {
-      myImage.effect(generativeReplace().from(bgState.generativeReplace.to));
+      myImage.effect(generativeReplace().from(bgState.generativeReplace.from).to(bgState.generativeReplace.to));
     }
 
     // Apply AI effects
