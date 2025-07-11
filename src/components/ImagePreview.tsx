@@ -55,7 +55,7 @@ const ImagePreview: React.FC = () => {
 
   if (!displayUrl) {
     return (
-      <div className="w-full max-w-4xl h-96 bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center backdrop-blur-sm">
+      <div className="md:w-full md:max-w-4xl md:h-96 h-[200px] bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center backdrop-blur-sm">
         <p className="text-gray-400 text-lg">No image loaded</p>
       </div>
     );
@@ -63,7 +63,7 @@ const ImagePreview: React.FC = () => {
 
   return (
     <div className="w-full max-w-5xl h-full max-h-[600px] p-4">
-      <div className="w-full h-full bg-gray-800/30 rounded-xl border border-gray-700 backdrop-blur-sm shadow-2xl overflow-hidden relative">
+      <div className="w-full h-full md:bg-gray-800/30 rounded-xl md:border border-gray-700 md:backdrop-blur-sm md:shadow-2xl overflow-hidden relative">
         {isLoading && (
           <div className="absolute top-2 right-2 z-10">
             <div className="bg-slate-900/80 rounded-full px-3 py-1 flex items-center space-x-2">
@@ -76,9 +76,9 @@ const ImagePreview: React.FC = () => {
           <img
             src={displayUrl}
             alt="Preview"
-            className="max-w-full max-h-full object-contain rounded-lg shadow-lg transition-all duration-150 hover:shadow-xl"
+            className="max-w-full md:mt-0 -mt-4 md:max-h-full max-h-[235px] object-contain rounded-lg md:shadow-lg transition-all duration-150 md:hover:shadow-xl"
             style={{
-              filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
+              filter: 'md:drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
             }}
             onLoad={() => setIsLoading(false)}
             onError={() => setIsLoading(false)}

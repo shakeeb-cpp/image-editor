@@ -40,12 +40,12 @@ const EditorTabs: React.FC<EditorTabsProps> = ({ activeTab, setActiveTab }) => {
   };
 
   return (
-    <div className="w-full flex h-screen">
+    <div className="w-full flex h-screen relative">
 
 
       {/* Content panel */}
       {activeTab &&
-        <div className="flex-1 transition-all duration-300 bg-slate-800 overflow-auto">
+        <div className="flex-1 absolute z-30 w-full transition-all duration-300 bg-slate-800 md:max-h-full mt-auto max-h-[200px] overflow-auto">
           {renderActivePanel()}
         </div>
       }

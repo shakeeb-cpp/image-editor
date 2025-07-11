@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
@@ -51,34 +51,31 @@ const FilterPanel: React.FC = () => {
   }) => (
     <button
       onClick={onClick}
-      className={`flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors ${
-        active
+      className={`flex items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${active
           ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
           : 'bg-slate-700 text-gray-200 hover:bg-slate-600'
-      }`}
+        }`}
     >
-      {Icon && <Icon className="w-4 h-4 mr-2" />}
+      {Icon && <Icon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />}
       {label}
     </button>
   );
 
-
-
   return (
     <>
-      <div className="bg-slate-800 rounded-lg p-6 overflow-y-auto pb-44">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-200">Filters</h3>
+      <div className="bg-slate-800 rounded-lg p-4 sm:p-6 overflow-y-auto pb-28 md:pb-44">
+        <div className="flex justify-between items-center mb-3 sm:mb-4">
+          <h3 className="text-sm sm:text-md md:text-lg font-semibold text-gray-200">Filters</h3>
           <button
             onClick={handleReset}
-            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 sm:p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             title="Reset filters"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
           <ToggleButton
             label="Grayscale"
             active={grayscale}
@@ -117,10 +114,10 @@ const FilterPanel: React.FC = () => {
           />
         </div>
 
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-gray-400">Blur</label>
-            <span className="text-sm text-gray-400">{blur}px</span>
+        <div className="mb-3 sm:mb-4">
+          <div className="flex justify-between items-center mb-1 sm:mb-2">
+            <label className="text-xs sm:text-sm font-medium text-gray-400">Blur</label>
+            <span className="text-xs sm:text-sm text-gray-400">{blur}px</span>
           </div>
           <input
             type="range"
@@ -129,14 +126,14 @@ const FilterPanel: React.FC = () => {
             step={1}
             value={blur}
             onChange={(e) => handleSliderChange(() => dispatch(setBlur(parseInt(e.target.value))))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            className="w-full h-1.5 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
 
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-gray-400">Colorize</label>
-            <span className="text-sm text-gray-400">{colorize}</span>
+        <div className="mb-3 sm:mb-4">
+          <div className="flex justify-between items-center mb-1 sm:mb-2">
+            <label className="text-xs sm:text-sm font-medium text-gray-400">Colorize</label>
+            <span className="text-xs sm:text-sm text-gray-400">{colorize}</span>
           </div>
           <input
             type="range"
@@ -145,14 +142,14 @@ const FilterPanel: React.FC = () => {
             step={1}
             value={colorize}
             onChange={(e) => handleSliderChange(() => dispatch(setColorize(parseInt(e.target.value))))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            className="w-full h-1.5 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
 
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-gray-400">Oil Paint</label>
-            <span className="text-sm text-gray-400">{oilPaint}</span>
+        <div className="mb-3 sm:mb-4">
+          <div className="flex justify-between items-center mb-1 sm:mb-2">
+            <label className="text-xs sm:text-sm font-medium text-gray-400">Oil Paint</label>
+            <span className="text-xs sm:text-sm text-gray-400">{oilPaint}</span>
           </div>
           <input
             type="range"
@@ -161,14 +158,14 @@ const FilterPanel: React.FC = () => {
             step={1}
             value={oilPaint}
             onChange={(e) => handleSliderChange(() => dispatch(setOilPaint(parseInt(e.target.value))))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            className="w-full h-1.5 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
 
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-medium text-gray-400">Pixelate</label>
-            <span className="text-sm text-gray-400">{pixelate}px</span>
+        <div className="mb-3 sm:mb-4">
+          <div className="flex justify-between items-center mb-1 sm:mb-2">
+            <label className="text-xs sm:text-sm font-medium text-gray-400">Pixelate</label>
+            <span className="text-xs sm:text-sm text-gray-400">{pixelate}px</span>
           </div>
           <input
             type="range"
@@ -177,16 +174,16 @@ const FilterPanel: React.FC = () => {
             step={1}
             value={pixelate}
             onChange={(e) => handleSliderChange(() => dispatch(setPixelate(parseInt(e.target.value))))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            className="w-full h-1.5 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="text-sm font-medium text-gray-400 mb-2 block">Color Blind Simulation</label>
+        <div className="mb-3 sm:mb-4">
+          <label className="text-xs sm:text-sm font-medium text-gray-400 mb-1 sm:mb-2 block">Color Blind Simulation</label>
           <select
             value={simulateColorBlind}
             onChange={(e) => handleSliderChange(() => dispatch(setSimulateColorBlind(e.target.value)))}
-            className="w-full px-3 py-2 bg-slate-700 text-gray-200 rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
+            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-slate-700 text-gray-200 rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
           >
             <option value="none">None</option>
             <option value="deuteranopia">Deuteranopia</option>

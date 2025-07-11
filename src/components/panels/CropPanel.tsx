@@ -39,49 +39,49 @@ const CropPanel: React.FC = () => {
   ];
 
   return (
-    <div className="bg-slate-800 rounded-lg p-6 mb-16">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-300">Crop & Resize</h3>
+    <div className="bg-slate-800 rounded-lg p-3 md:p-6 md:mb-16 mb-6">
+      <div className="flex justify-between items-center mb-3 md:mb-4">
+        <h3 className="text-sm md:text-lg font-semibold text-gray-300">Crop & Resize</h3>
         <button
           onClick={() => dispatch(resetCrop())}
-          className="p-2 text-gray-500 hover:text-gray-400 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-1.5 md:p-2 text-gray-500 hover:text-gray-400 hover:bg-gray-100 rounded-lg transition-colors"
           title="Reset crop"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-3 h-3 md:w-4 md:h-4" />
         </button>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-3 md:mb-4">
         <button
           onClick={() => dispatch(setActive(!active))}
-          className={`w-full flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors ${active
+          className={`w-full flex items-center justify-center px-3 md:px-4 py-2 md:py-2 rounded-lg text-sm md:text-base font-medium transition-colors ${active
               ? 'bg-blue-500 text-white hover:bg-blue-600'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
         >
-          <Crop className="w-4 h-4 mr-2" />
+          <Crop className="w-3 h-3 md:w-4 md:h-4 mr-2" />
           {active ? 'Crop Active' : 'Enable Crop'}
         </button>
       </div>
 
       {/* Position Selection */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-400 mb-2">Crop Position</label>
-        <div className="grid grid-cols-3 gap-2">
+      <div className="mb-3 md:mb-4">
+        <label className="block text-xs md:text-sm font-medium text-gray-400 mb-2">Crop Position</label>
+        <div className="grid grid-cols-3 gap-1 md:gap-2">
           {positionOptions.map((option) => {
             const IconComponent = option.icon;
             return (
               <button
                 key={option.value}
                 onClick={() => dispatch(setPosition(option.value as 'top' | 'center' | 'bottom'))}
-                className={`flex items-center justify-center px-3 py-2 rounded-lg font-medium transition-colors ${
+                className={`flex items-center justify-center px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors ${
                   position === option.value
                     ? 'bg-blue-500 text-white'
                     : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
                 }`}
               >
-                <IconComponent className="w-4 h-4 mr-1" />
-                {option.label}
+                <IconComponent className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                <span className="hidden sm:inline">{option.label}</span>
               </button>
             );
           })}
@@ -91,48 +91,48 @@ const CropPanel: React.FC = () => {
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-2 gap-2 md:gap-4 mb-3 md:mb-4">
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">X Position</label>
+          <label className="block text-xs md:text-sm font-medium text-gray-400 mb-1">X Position</label>
           <input
             type="number"
             value={x}
             onChange={(e) => handleCropChange('x', parseInt(e.target.value) || 0)}
-            className="w-full px-3 py-2 border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Y Position</label>
+          <label className="block text-xs md:text-sm font-medium text-gray-400 mb-1">Y Position</label>
           <input
             type="number"
             value={y}
             onChange={(e) => handleCropChange('y', parseInt(e.target.value) || 0)}
-            className="w-full px-3 py-2 border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Width</label>
+          <label className="block text-xs md:text-sm font-medium text-gray-400 mb-1">Width</label>
           <input
             type="number"
             value={width}
             onChange={(e) => handleCropChange('width', parseInt(e.target.value) || 0)}
-            className="w-full px-3 py-2 border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Height</label>
+          <label className="block text-xs md:text-sm font-medium text-gray-400 mb-1">Height</label>
           <input
             type="number"
             value={height}
             onChange={(e) => handleCropChange('height', parseInt(e.target.value) || 0)}
-            className="w-full px-3 py-2 border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm border border-gray-600 rounded-md bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
 
       <div>
-        <h4 className="text-sm font-medium text-gray-400 mb-2">Preset Ratios</h4>
-        <div className="grid grid-cols-2 gap-2">
+        <h4 className="text-xs md:text-sm font-medium text-gray-400 mb-2">Preset Ratios</h4>
+        <div className="grid grid-cols-2 gap-1 md:gap-2">
           {presetCrops.map((preset) => (
             <button
               key={preset.name}
@@ -145,7 +145,7 @@ const CropPanel: React.FC = () => {
                 }));
                 dispatch(setActive(true));
               }}
-              className="px-3 py-2 text-sm bg-slate-700 hover:bg-slate-600 rounded-md transition-colors"
+              className="px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm bg-slate-700 hover:bg-slate-600 rounded-md transition-colors"
             >
               {preset.name}
               <span className="block text-xs text-gray-300">{preset.ratio}</span>

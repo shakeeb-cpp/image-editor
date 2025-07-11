@@ -215,7 +215,7 @@ const OverlayPanel: React.FC = () => {
   return (
     <div className="bg-slate-800 rounded-lg p-6 overflow-y-auto pb-24">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-200">Text Overlay</h3>
+        <h3 className="md:text-lg text-md font-semibold text-gray-200">Text Overlay</h3>
         <button
           onClick={handleResetOverlays}
           className="p-2 text-gray-500 hover:text-gray-300 hover:bg-slate-700 rounded-lg transition-colors"

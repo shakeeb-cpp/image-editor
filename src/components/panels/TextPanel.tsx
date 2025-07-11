@@ -27,38 +27,38 @@ const TextPanel: React.FC = () => {
   const fontFamilies = ['Arial', 'Helvetica', 'Times New Roman', 'Georgia', 'Verdana'];
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Text Overlay</h3>
-        <Type className="w-5 h-5 text-slate-400" />
+        <h3 className="text-sm md:text-lg font-semibold text-white">Text Overlay</h3>
+        <Type className="w-4 h-4 md:w-5 md:h-5 text-slate-400" />
       </div>
       
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         <div className="flex space-x-2">
           <input
             type="text"
             value={newText}
             onChange={(e) => setNewText(e.target.value)}
             placeholder="Enter text..."
-            className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+            className="flex-1 px-2 md:px-3 py-1.5 md:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs md:text-sm focus:outline-none focus:border-blue-500"
           />
           <button
             onClick={addText}
-            className="px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+            className="px-2 md:px-3 py-1.5 md:py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
           >
-            <Plus className="w-4 h-4 text-white" />
+            <Plus className="w-2 h-2 md:w-4 md:h-4 text-white" />
           </button>
         </div>
         
         {textOverlays.map(overlay => (
-          <div key={overlay.id} className="p-3 bg-slate-800 rounded-lg space-y-3">
+          <div key={overlay.id} className="p-2 md:p-3 bg-slate-800 rounded-lg space-y-2 md:space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-white truncate">{overlay.text}</span>
+              <span className="text-xs md:text-sm text-white truncate">{overlay.text}</span>
               <button
                 onClick={() => dispatch(removeTextOverlay(overlay.id))}
                 className="p-1 text-red-400 hover:text-red-300 transition-colors"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
               </button>
             </div>
             
@@ -70,8 +70,8 @@ const TextPanel: React.FC = () => {
                     type="number"
                     value={overlay.fontSize}
                     onChange={(e) => dispatch(updateTextOverlay({
-                      id: overlay.id,
-                      updates: { fontSize: Number(e.target.value) }
+                      ...overlay,
+                      fontSize: Number(e.target.value)
                     }))}
                     className="w-full px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-xs"
                   />
@@ -82,10 +82,10 @@ const TextPanel: React.FC = () => {
                     type="color"
                     value={overlay.color}
                     onChange={(e) => dispatch(updateTextOverlay({
-                      id: overlay.id,
-                      updates: { color: e.target.value }
+                      ...overlay,
+                      color: e.target.value
                     }))}
-                    className="w-full h-7 bg-slate-700 border border-slate-600 rounded"
+                    className="w-full h-6 md:h-7 bg-slate-700 border border-slate-600 rounded"
                   />
                 </div>
               </div>
@@ -95,8 +95,8 @@ const TextPanel: React.FC = () => {
                 <select
                   value={overlay.fontFamily}
                   onChange={(e) => dispatch(updateTextOverlay({
-                    id: overlay.id,
-                    updates: { fontFamily: e.target.value }
+                    ...overlay,
+                    fontFamily: e.target.value
                   }))}
                   className="w-full px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-xs"
                 >

@@ -130,18 +130,18 @@ const AiPanel: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 mb-24">
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6 mb-10">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <Sparkles className="w-5 h-5" />
+        <h2 className="text-md sm:text-xl font-semibold text-white flex items-center gap-2">
+          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
           AI Effects
         </h2>
         <button
           onClick={handleReset}
-          className="p-2 text-gray-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+          className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
           title="Reset all AI effects"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
       </div>
 
@@ -155,19 +155,19 @@ const AiPanel: React.FC = () => {
       />
 
       {/* Generative Recolor */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Palette className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <Palette className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Generative Recolor
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {aiState.generativeRecolor.isProcessing && (
-              <Loader2 className="w-4 h-4 text-purple-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500 animate-spin" />
             )}
             <button
               onClick={handleGenerativeRecolor}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 aiState.generativeRecolor.enabled
                   ? 'bg-purple-600 text-white'
                   : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
@@ -178,23 +178,23 @@ const AiPanel: React.FC = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex  gap-1.5 sm:gap-2 w-full">
           <input
             type="text"
             value={aiState.generativeRecolor.prompt}
             onChange={(e) => dispatch(setGenerativeRecolorPrompt(e.target.value))}
-            placeholder="Object to recolor (e.g., 'dog')"
-            className="px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500"
+            placeholder="Object to recolor (e.g., 'dog', 'item')"
+            className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white w-full text-xs sm:text-sm focus:outline-none focus:border-purple-500"
           />
           <input
             type="color"
             value={aiState.generativeRecolor.color}
             onChange={(e) => dispatch(setGenerativeRecolorColor(e.target.value))}
-            className="px-1 py-2 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:border-purple-500"
+            className="px-1 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:border-purple-500"
           />
         </div>
         
-        <label className="flex items-center gap-2 text-sm text-gray-300">
+        <label className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-300">
           <input
             type="checkbox"
             checked={aiState.generativeRecolor.detectMultiple}
@@ -217,19 +217,19 @@ const AiPanel: React.FC = () => {
       </div>
 
       {/* Generative Restore */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <RefreshCw className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Generative Restore
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {aiState.generativeRestore.isProcessing && (
-              <Loader2 className="w-4 h-4 text-green-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500 animate-spin" />
             )}
             <button
               onClick={handleGenerativeRestore}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 aiState.generativeRestore.enabled
                   ? 'bg-green-600 text-white'
                   : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
@@ -253,19 +253,19 @@ const AiPanel: React.FC = () => {
       </div>
 
       {/* Upscale */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Upscale
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {aiState.upscale.isProcessing && (
-              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 animate-spin" />
             )}
             <button
               onClick={handleUpscale}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 aiState.upscale.enabled
                   ? 'bg-blue-600 text-white'
                   : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
@@ -289,19 +289,19 @@ const AiPanel: React.FC = () => {
       </div>
 
       {/* Enhance */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Star className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Enhance
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {aiState.enhance.isProcessing && (
-              <Loader2 className="w-4 h-4 text-orange-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500 animate-spin" />
             )}
             <button
               onClick={handleEnhance}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 aiState.enhance.enabled
                   ? 'bg-orange-600 text-white'
                   : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
@@ -325,19 +325,19 @@ const AiPanel: React.FC = () => {
       </div>
 
       {/* Extract */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Target className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Extract
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {aiState.extract.isProcessing && (
-              <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-500 animate-spin" />
             )}
             <button
               onClick={handleExtract}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 aiState.extract.enabled
                   ? 'bg-indigo-600 text-white'
                   : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
@@ -348,18 +348,18 @@ const AiPanel: React.FC = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
           <input
             type="text"
             value={aiState.extract.prompt}
             onChange={(e) => dispatch(setExtractPrompt(e.target.value))}
             placeholder="Object to extract (e.g., 'dog')"
-            className="px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
           />
           <select
             value={aiState.extract.mode}
             onChange={(e) => dispatch(setExtractMode(e.target.value as 'content' | 'mask'))}
-            className="px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500"
+            className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
           >
             <option value="content">Content</option>
             <option value="mask">Mask</option>
@@ -380,10 +380,10 @@ const AiPanel: React.FC = () => {
 
       {/* Overall Processing Status */}
       {aiState.isAnyProcessing && (
-        <div className="mt-6 p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg">
-          <div className="flex items-center gap-2 text-purple-400">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span className="text-sm font-medium">Processing AI effects...</span>
+        <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-purple-400">
+            <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
+            <span className="text-xs sm:text-sm font-medium">Processing AI effects...</span>
           </div>
           <p className="text-xs text-purple-300 mt-1">
             AI processing may take several moments to complete.

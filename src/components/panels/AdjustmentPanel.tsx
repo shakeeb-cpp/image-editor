@@ -92,10 +92,10 @@ const SliderControl: React.FC<SliderControlProps> = React.memo(({
   }, [value]);
   
   return (
-    <div className="mb-4">
-      <div className="flex justify-between items-center mb-2">
-        <label className="text-sm font-medium text-gray-400">{label}</label>
-        <span className="text-sm text-gray-500">{value}</span>
+    <div className="mb-3 sm:mb-4">
+      <div className="flex justify-between items-center mb-1 sm:mb-2">
+        <label className="text-xs sm:text-sm font-medium text-gray-400">{label}</label>
+        <span className="text-xs sm:text-sm text-gray-500">{value}</span>
       </div>
       <input
         ref={sliderRef}
@@ -106,7 +106,7 @@ const SliderControl: React.FC<SliderControlProps> = React.memo(({
         defaultValue={value}
         onChange={handleSliderChange}
         onClick={handleSliderClick}
-        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+        className="w-full h-1.5 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
         style={{
           background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((value - min) / (max - min)) * 100}%, #e5e7eb ${((value - min) / (max - min)) * 100}%, #e5e7eb 100%)`
         }}
@@ -186,15 +186,15 @@ const AdjustmentPanel: React.FC = () => {
   }, [dispatch]);
   
   return (
-    <div className="bg-slate-800 rounded-lg p-6 mb-20">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-300">Adjustments</h3>
+    <div className="bg-slate-800 rounded-lg p-4 sm:p-6 mb-3 md:mb-20">
+      <div className="flex justify-between items-center mb-3 sm:mb-4">
+        <h3 className="text-sm sm:text-md md:text-lg font-semibold text-gray-300">Adjustments</h3>
         <button
           onClick={handleReset}
-          className="p-2 text-gray-500 hover:text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
+          className="p-1.5 sm:p-2 text-gray-500 hover:text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
           title="Reset adjustments"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
       </div>
 
@@ -213,4 +213,3 @@ const AdjustmentPanel: React.FC = () => {
 };
 
 export default AdjustmentPanel;
-

@@ -28,7 +28,7 @@ const ProgressBar: React.FC<{ progress: number; label: string }> = ({ progress, 
         className="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-out"
         style={{ width: `${progress}%` }}
       ></div>
-      <p className="text-xs text-gray-400 mt-1">{label}</p>
+      <p className="text-xs sm:text-xs text-gray-400 mt-1">{label}</p>
     </div>
   );
 };
@@ -220,41 +220,41 @@ const BgPanel: React.FC = () => {
     bgState.generativeBackgroundReplace.isProcessing;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6 mb-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <Image className="w-5 h-5" />
+        <h2 className="text-md md:text-xl font-semibold text-white flex items-center gap-2">
+          <Image className="w-4 h-4 sm:w-5 sm:h-5" />
           Background Effects
         </h2>
         <button
           onClick={handleReset}
           disabled={isAnyProcessing}
-          className={`p-2 rounded-lg transition-colors ${
+          className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
             isAnyProcessing 
               ? 'text-gray-500 cursor-not-allowed' 
               : 'text-gray-400 hover:text-white hover:bg-slate-700'
           }`}
           title="Reset all background effects"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
       </div>
 
       {/* Background Removal */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Eraser className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <Eraser className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Background Removal
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {bgState.backgroundRemoval.isProcessing && (
-              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 animate-spin" />
             )}
             <button
               onClick={handleBackgroundRemoval}
               disabled={isAnyProcessing && !bgState.backgroundRemoval.isProcessing}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 bgState.backgroundRemoval.enabled
                   ? 'bg-blue-600 text-white'
                   : isAnyProcessing && !bgState.backgroundRemoval.isProcessing
@@ -280,20 +280,20 @@ const BgPanel: React.FC = () => {
       </div>
 
       {/* Generative Remove */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Wand2 className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <Wand2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Generative Remove
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {bgState.generativeRemove.isProcessing && (
-              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 animate-spin" />
             )}
             <button
               onClick={handleGenerativeRemove}
               disabled={isAnyProcessing && !bgState.generativeRemove.isProcessing}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 bgState.generativeRemove.enabled
                   ? 'bg-blue-600 text-white'
                   : isAnyProcessing && !bgState.generativeRemove.isProcessing
@@ -312,7 +312,7 @@ const BgPanel: React.FC = () => {
           onChange={(e) => dispatch(setGenerativeRemovePrompt(e.target.value))}
           placeholder="Enter what to remove (e.g., 'dog')"
           disabled={isAnyProcessing}
-          className={`w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 ${
+          className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-blue-500 ${
             isAnyProcessing ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         />
@@ -330,20 +330,20 @@ const BgPanel: React.FC = () => {
       </div>
 
       {/* Generative Replace */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Replace className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <Replace className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Generative Replace
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {bgState.generativeReplace.isProcessing && (
-              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 animate-spin" />
             )}
             <button
               onClick={handleGenerativeReplace}
               disabled={isAnyProcessing && !bgState.generativeReplace.isProcessing}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 bgState.generativeReplace.enabled
                   ? 'bg-blue-600 text-white'
                   : isAnyProcessing && !bgState.generativeReplace.isProcessing
@@ -356,14 +356,14 @@ const BgPanel: React.FC = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
           <input
             type="text"
             value={bgState.generativeReplace.from}
             onChange={(e) => dispatch(setGenerativeReplaceFrom(e.target.value))}
             placeholder="Replace this (e.g., 'dog')"
             disabled={isAnyProcessing}
-            className={`px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 ${
+            className={`px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-blue-500 ${
               isAnyProcessing ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           />
@@ -373,7 +373,7 @@ const BgPanel: React.FC = () => {
             onChange={(e) => dispatch(setGenerativeReplaceTo(e.target.value))}
             placeholder="With this (e.g., 'cat')"
             disabled={isAnyProcessing}
-            className={`px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 ${
+            className={`px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-blue-500 ${
               isAnyProcessing ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           />
@@ -392,20 +392,20 @@ const BgPanel: React.FC = () => {
       </div>
 
       {/* Generative Background Replace */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Image className="w-4 h-4" />
+          <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-1.5 sm:gap-2">
+            <Image className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             Background Replace
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {bgState.generativeBackgroundReplace.isProcessing && (
-              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 animate-spin" />
             )}
             <button
               onClick={handleGenerativeBackgroundReplace}
               disabled={isAnyProcessing && !bgState.generativeBackgroundReplace.isProcessing}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 bgState.generativeBackgroundReplace.enabled
                   ? 'bg-blue-600 text-white'
                   : isAnyProcessing && !bgState.generativeBackgroundReplace.isProcessing
@@ -424,7 +424,7 @@ const BgPanel: React.FC = () => {
           onChange={(e) => dispatch(setGenerativeBackgroundReplacePrompt(e.target.value))}
           placeholder="New background (e.g., 'a buildings')"
           disabled={isAnyProcessing}
-          className={`w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 ${
+          className={`w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-blue-500 ${
             isAnyProcessing ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         />
@@ -443,10 +443,10 @@ const BgPanel: React.FC = () => {
 
       {/* Overall Processing Status */}
       {isAnyProcessing && (
-        <div className="mt-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-          <div className="flex items-center gap-2 text-blue-400">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span className="text-sm font-medium">Processing background effects...</span>
+        <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-blue-400">
+            <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
+            <span className="text-xs sm:text-sm font-medium">Processing background effects...</span>
           </div>
           <p className="text-xs text-blue-300 mt-1">
             Please wait while we apply the changes to your image.

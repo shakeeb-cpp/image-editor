@@ -85,7 +85,7 @@ const ImageUpload: React.FC = () => {
             {/* <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
               <Upload className="w-8 h-8 text-blue-500" />
             </div> */}
-            <h3 className="text-lg font-semibold text-gray-200 mb-2">Upload an Image to get started</h3>
+            <h3 className="md:text-lg text-md font-semibold text-gray-200 mb-2">Upload an Image to get started</h3>
             <p className="text-slate-400 mb-4">
               Drag and drop an image here, or click to select a file
             </p>
