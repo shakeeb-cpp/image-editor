@@ -17,7 +17,7 @@ const RotationPanel: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-800 rounded-lg p-3 md:p-6">
+    <div className="bg-slate-800 rounded-lg p-3 md:p-6 pb-[124px]">
       <div className="flex justify-between items-center mb-3 md:mb-4">
         <h3 className="text-sm md:text-lg font-semibold text-gray-200">Rotate & Flip</h3>
         <button

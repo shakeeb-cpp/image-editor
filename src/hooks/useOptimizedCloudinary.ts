@@ -30,6 +30,7 @@ import {
   enhance,
   extract,
   generativeReplace,
+  generativeBackgroundReplace,
 } from "@cloudinary/url-gen/actions/effect";
 import { crop } from "@cloudinary/url-gen/actions/resize";
 import { byAngle, mode } from "@cloudinary/url-gen/actions/rotate";
@@ -255,7 +256,22 @@ export const useOptimizedCloudinary = () => {
       bgState.generativeReplace.from &&
       bgState.generativeReplace.to
     ) {
-      myImage.effect(generativeReplace().from(bgState.generativeReplace.from).to(bgState.generativeReplace.to));
+      myImage.effect(
+        generativeReplace()
+          .from(bgState.generativeReplace.from)
+          .to(bgState.generativeReplace.to)
+      );
+    }
+
+    if (
+      bgState.generativeBackgroundReplace.enabled &&
+      bgState.generativeBackgroundReplace.prompt
+    ) {
+      myImage.effect(
+        generativeBackgroundReplace().prompt(
+          bgState.generativeBackgroundReplace.prompt
+        )
+      );
     }
 
     // Apply AI effects

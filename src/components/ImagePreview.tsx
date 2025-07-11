@@ -66,9 +66,8 @@ const ImagePreview: React.FC = () => {
       <div className="w-full h-full md:bg-gray-800/30 rounded-xl md:border border-gray-700 md:backdrop-blur-sm md:shadow-2xl overflow-hidden relative">
         {isLoading && (
           <div className="absolute top-2 right-2 z-10">
-            <div className="bg-slate-900/80 rounded-full px-3 py-1 flex items-center space-x-2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-slate-300">Processing...</span>
+            <div className="bg-slate-900 opacity-0 rounded-full px-3 py-1 flex items-center space-x-2">
+              <span className="text-xs text-slate-300"></span>
             </div>
           </div>
         )}
@@ -76,7 +75,7 @@ const ImagePreview: React.FC = () => {
           <img
             src={displayUrl}
             alt="Preview"
-            className="max-w-full md:mt-0 -mt-4 md:max-h-full max-h-[235px] object-contain rounded-lg md:shadow-lg transition-all duration-150 md:hover:shadow-xl"
+            className="max-w-full md:mt-0 -mt-4 max-h-full object-contain rounded-lg md:shadow-lg transition-all duration-150 md:hover:shadow-xl"
             style={{
               filter: 'md:drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
             }}

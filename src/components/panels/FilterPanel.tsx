@@ -1,18 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import {
-  setGrayscale, setSepia, setBlur, setVignette, resetFilters,
-  setColorize,
-  setBlackAndWhite,
-  setRedEye,
-  setNegate,
-  setOilPaint,
-  setSimulateColorBlind,
-  setPixelate
+import { 
+  setGrayscale, setSepia, setBlur, setVignette, setColorize, 
+  setBlackAndWhite, setRedEye, setNegate, setOilPaint, 
+  setSimulateColorBlind, setPixelate, resetFilters 
 } from '../../store/slices/filterSlice';
-import { RotateCcw, Palette } from 'lucide-react';
+import { Palette, RotateCcw, ChevronDown } from 'lucide-react';
 
 const FilterPanel: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -52,8 +47,8 @@ const FilterPanel: React.FC = () => {
     <button
       onClick={onClick}
       className={`flex items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${active
-          ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
-          : 'bg-slate-700 text-gray-200 hover:bg-slate-600'
+        ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+        : 'bg-slate-700 text-gray-200 hover:bg-slate-600'
         }`}
     >
       {Icon && <Icon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />}
@@ -61,9 +56,11 @@ const FilterPanel: React.FC = () => {
     </button>
   );
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
     <>
-      <div className="bg-slate-800 rounded-lg p-4 sm:p-6 overflow-y-auto pb-28 md:pb-44">
+      <div className="bg-slate-800 rounded-lg p-4 sm:p-6 overflow-y-auto pb-28 md:pb-48 relative">
         <div className="flex justify-between items-center mb-3 sm:mb-4">
           <h3 className="text-sm sm:text-md md:text-lg font-semibold text-gray-200">Filters</h3>
           <button
@@ -177,19 +174,40 @@ const FilterPanel: React.FC = () => {
             className="w-full h-1.5 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
-
-        <div className="mb-3 sm:mb-4">
+        {/* Custom dropdown for color blind simulation */}
+        <div className="mb-3 sm:mb-4 relative">
           <label className="text-xs sm:text-sm font-medium text-gray-400 mb-1 sm:mb-2 block">Color Blind Simulation</label>
-          <select
-            value={simulateColorBlind}
-            onChange={(e) => handleSliderChange(() => dispatch(setSimulateColorBlind(e.target.value)))}
-            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-slate-700 text-gray-200 rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
-          >
-            <option value="none">None</option>
-            <option value="deuteranopia">Deuteranopia</option>
-            <option value="protanopia">Protanopia</option>
-            <option value="tritanopia">Tritanopia</option>
-          </select>
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-slate-700 text-gray-200 rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none flex justify-between items-center"
+            >
+              <span>{simulateColorBlind === 'none' ? 'None' : 
+                simulateColorBlind === 'deuteranopia' ? 'Deuteranopia' : 
+                simulateColorBlind === 'protanopia' ? 'Protanopia' : 'Tritanopia'}
+              </span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {isDropdownOpen && (
+              <div className="absolute z-10 w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg shadow-lg">
+                {['none', 'deuteranopia', 'protanopia', 'tritanopia'].map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => {
+                      dispatch(setSimulateColorBlind(option));
+                      setIsDropdownOpen(false);
+                    }}
+                    className="w-full px-3 py-2 text-left text-xs sm:text-sm hover:bg-slate-700 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                  >
+                    {option === 'none' ? 'None' : 
+                      option === 'deuteranopia' ? 'Deuteranopia' : 
+                      option === 'protanopia' ? 'Protanopia' : 'Tritanopia'}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -197,3 +215,4 @@ const FilterPanel: React.FC = () => {
 };
 
 export default FilterPanel;
+

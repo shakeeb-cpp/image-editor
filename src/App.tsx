@@ -60,14 +60,14 @@ const AppContent: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(activeTab === tab.id ? 'none' : tab.id)}
-                    className={`flex items-center justify-center ${isMobile ? 'w-7 h-8' : 'w-16 h-16'} transition-all duration-200 relative group ${
+                    className={`flex items-center justify-center ${isMobile ? 'w-11 h-11' : 'w-16 h-16'} transition-all duration-200 relative group ${
                       activeTab === tab.id
                         ? 'bg-blue-600 text-white shadow-lg'
                         : 'text-gray-400 hover:text-white hover:bg-gray-700'
                     }`}
                     title={tab.label}
                   >
-                    <tab.icon className={`${isMobile ? 'w-4 h-4' : 'w-6 h-6'}`} />
+                    <tab.icon className={`${isMobile ? 'w-6 h-6' : 'w-6 h-6'}`} />
 
                     {/* Active indicator */}
                     {activeTab === tab.id && (
@@ -88,7 +88,7 @@ const AppContent: React.FC = () => {
               <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
                 activeTab !== 'none' ? (isMobile ? 'h-auto opacity-100' : 'w-96 opacity-100') : (isMobile ? 'h-0 opacity-0' : 'w-0 opacity-0')
               }`}>
-                <div className={`${isMobile ? 'w-full h-[195px] absolute bottom-7 left-0 right-0' : 'w-96 h-full'} bg-slate-900 md:border-r border-slate-700 overflow-hidden`}>
+                <div className={`${isMobile ? 'w-full h-[300px] absolute bottom-12 left-0 right-0' : 'w-96 h-full'} bg-slate-900 md:border-r border-slate-700 overflow-hidden`}>
                   <div className="transform transition-all duration-300 ease-in-out">
                     <EditorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
                   </div>
