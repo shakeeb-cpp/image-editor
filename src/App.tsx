@@ -45,8 +45,8 @@ const AppContent: React.FC = () => {
       <Header />
 
       {/* Body */}
-      <div className={`flex-1 w-full relative overflow-hidden ${publicId ? 'flex justify-center items-center' : ''}`}>
-        {publicId ? (
+      <div className={`flex-1 w-full relative overflow-hidden ${!publicId ? 'flex justify-center items-center' : ''}`}>
+        {!publicId ? (
           <div className="max-w-2xl mx-auto">
             <ImageUpload />
           </div>
@@ -60,7 +60,7 @@ const AppContent: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(activeTab === tab.id ? 'none' : tab.id)}
-                    className={`flex items-center justify-center ${isMobile ? 'w-7 h-7' : 'w-16 h-16'} transition-all duration-200 relative group ${
+                    className={`flex items-center justify-center ${isMobile ? 'w-7 h-8' : 'w-16 h-16'} transition-all duration-200 relative group ${
                       activeTab === tab.id
                         ? 'bg-blue-600 text-white shadow-lg'
                         : 'text-gray-400 hover:text-white hover:bg-gray-700'
