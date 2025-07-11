@@ -186,7 +186,7 @@ const AdjustmentPanel: React.FC = () => {
   }, [dispatch]);
   
   return (
-    <div className="bg-slate-800 rounded-lg p-4 sm:p-6 mb-3 md:mb-20">
+    <div className="bg-slate-800 md:rounded-lg p-4 sm:p-6 pb-3 md:mb-20">
       <div className="flex justify-between items-center mb-3 sm:mb-4">
         <h3 className="text-sm sm:text-md md:text-lg font-semibold text-gray-300">Adjustments</h3>
         <button

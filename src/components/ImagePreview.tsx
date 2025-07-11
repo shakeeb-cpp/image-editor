@@ -62,7 +62,7 @@ const ImagePreview: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-5xl h-full max-h-[600px] p-4">
+    <div className="w-full max-w-5xl h-full max-h-[600px] md:p-4 p-2">
       <div className="w-full h-full md:bg-gray-800/30 rounded-xl md:border border-gray-700 md:backdrop-blur-sm md:shadow-2xl overflow-hidden relative">
         {isLoading && (
           <div className="absolute top-2 right-2 z-10">
@@ -71,11 +71,11 @@ const ImagePreview: React.FC = () => {
             </div>
           </div>
         )}
-        <div className="w-full h-full p-4 flex items-center justify-center">
+        <div className="w-full h-full md:py-4 md:px-4 py-2 px-0 flex items-center justify-center">
           <img
             src={displayUrl}
             alt="Preview"
-            className="max-w-full md:mt-0 -mt-4 max-h-full object-contain rounded-lg md:shadow-lg transition-all duration-150 md:hover:shadow-xl"
+            className="max-w-full  md:max-h-full max-h-full object-contain rounded-lg md:shadow-lg transition-all duration-150 md:hover:shadow-xl"
             style={{
               filter: 'md:drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))',
             }}

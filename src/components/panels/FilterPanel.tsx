@@ -60,7 +60,7 @@ const FilterPanel: React.FC = () => {
 
   return (
     <>
-      <div className="bg-slate-800 rounded-lg p-4 sm:p-6 overflow-y-auto pb-28 md:pb-48 relative">
+      <div className="bg-slate-800 md:rounded-lg p-4 sm:p-6 overflow-y-auto pb-[130px] md:pb-48 relative">
         <div className="flex justify-between items-center mb-3 sm:mb-4">
           <h3 className="text-sm sm:text-md md:text-lg font-semibold text-gray-200">Filters</h3>
           <button

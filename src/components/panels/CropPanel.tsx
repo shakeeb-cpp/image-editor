@@ -39,7 +39,7 @@ const CropPanel: React.FC = () => {
   ];
 
   return (
-    <div className="bg-slate-800 rounded-lg p-3 md:p-6 md:mb-16 mb-6">
+    <div className="bg-slate-800 md:rounded-lg p-3 md:p-6 md:mb-16 pb-8">
       <div className="flex justify-between items-center mb-3 md:mb-4">
         <h3 className="text-sm md:text-lg font-semibold text-gray-300">Crop & Resize</h3>
         <button
